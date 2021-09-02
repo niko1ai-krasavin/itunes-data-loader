@@ -1,12 +1,13 @@
 package com.example.itunesdataloader.entities;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.io.Serializable;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-import java.io.Serializable;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 
 @NoArgsConstructor
 @Data

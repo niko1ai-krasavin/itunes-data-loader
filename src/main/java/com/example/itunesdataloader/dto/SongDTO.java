@@ -1,12 +1,15 @@
 package com.example.itunesdataloader.dto;
 
-
-import lombok.Data;
-
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+
+@NoArgsConstructor
 @Data
-public class SongDTO {
+public class SongDTO implements Serializable {
     private Long trackId;
     private String trackName;
     private String kind;

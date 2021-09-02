@@ -1,13 +1,13 @@
 package com.example.itunesdataloader.configurations;
 
-
-import okhttp3.ConnectionPool;
-import okhttp3.OkHttpClient;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.concurrent.TimeUnit;
+import okhttp3.ConnectionPool;
+import okhttp3.OkHttpClient;
+
 
 @Configuration
 public class OkHttpConfiguration {
@@ -22,7 +22,6 @@ public class OkHttpConfiguration {
                 .writeTimeout(30, TimeUnit.SECONDS)
                 .build();
     }
-
 
     /**
      * Create a new connection pool with tuning parameters appropriate for a single-user application.

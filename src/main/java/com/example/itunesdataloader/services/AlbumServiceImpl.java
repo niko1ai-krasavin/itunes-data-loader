@@ -1,13 +1,15 @@
 package com.example.itunesdataloader.services;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import lombok.Data;
+
 import com.example.itunesdataloader.dto.AlbumDTO;
 import com.example.itunesdataloader.entities.Album;
 import com.example.itunesdataloader.repositories.AlbumRepository;
-import lombok.Data;
-import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 @Data

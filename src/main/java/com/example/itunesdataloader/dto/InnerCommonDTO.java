@@ -1,15 +1,14 @@
 package com.example.itunesdataloader.dto;
 
+import java.io.Serializable;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
-import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @Data
 public class InnerCommonDTO implements Serializable {
-
     private String wrapperType;
     private String artistType;
     private String artistName;
@@ -32,7 +31,6 @@ public class InnerCommonDTO implements Serializable {
     private String copyright;
     private String country;
     private String currency;
-    // private LocalDateTime releaseDate;
     private String releaseDate;
     private String kind;
     private Long trackId;

@@ -1,9 +1,14 @@
 package com.example.itunesdataloader.dto;
 
-import lombok.Data;
+import java.io.Serializable;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+
+@NoArgsConstructor
 @Data
-public class ArtistDTO {
+public class ArtistDTO implements Serializable {
     private Long artistId;
     private String artistName;
     private Long amgArtistId;

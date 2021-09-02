@@ -1,13 +1,15 @@
 package com.example.itunesdataloader.mappers;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+import org.springframework.stereotype.Component;
+
 import com.example.itunesdataloader.dto.AlbumDTO;
 import com.example.itunesdataloader.dto.ArtistDTO;
 import com.example.itunesdataloader.dto.InnerCommonDTO;
 import com.example.itunesdataloader.dto.SongDTO;
-import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Component
 public class MapperFromInnerCommonDTO {
