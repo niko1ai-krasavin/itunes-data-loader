@@ -1,13 +1,11 @@
 package com.example.itunesdataloader.controllers;
 
 import com.example.itunesdataloader.configurations.OkHttpConfiguration;
-import com.example.itunesdataloader.dto.AlbumDTO;
-import com.example.itunesdataloader.dto.ArtistDTO;
-import com.example.itunesdataloader.dto.InnerCommonDTO;
-import com.example.itunesdataloader.dto.OuterCommonDTO;
+import com.example.itunesdataloader.dto.*;
 import com.example.itunesdataloader.mappers.MapperFromInnerCommonDTO;
 import com.example.itunesdataloader.services.AlbumService;
 import com.example.itunesdataloader.services.ArtistService;
+import com.example.itunesdataloader.services.SongService;
 import com.google.gson.Gson;
 import lombok.AllArgsConstructor;
 import okhttp3.OkHttpClient;
@@ -15,6 +13,7 @@ import okhttp3.Request;
 import okhttp3.ResponseBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -44,6 +43,9 @@ public class ItunesDataLoaderController {
     @Autowired
     private final AlbumService albumService;
 
+    @Autowired
+    private final SongService songService;
+
 
     @GetMapping(path="/albums", produces="application/json")
     public void getAlbumsFromITunes() {
@@ -63,6 +65,27 @@ public class ItunesDataLoaderController {
             }
             artistService.saveArtist(artistDTO);
             albumService.saveAlbums(albumDTOs);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @GetMapping("/albums/{collectionId}/songs")
+    public void getSongsFromITunes(@PathVariable Long collectionId) {
+        OkHttpClient okHttpClient = okHttpConfiguration.okHttpClient();
+        Request request = new Request.Builder().url(BASE_URL_ITUNES + "id=" +
+                collectionId + "&entity=song&limit=200").build();
+
+        Gson gson = new Gson();
+        try {
+            ResponseBody responseBody = okHttpClient.newCall(request).execute().body();
+            OuterCommonDTO outerCommonDTO = gson.fromJson(responseBody.string(), OuterCommonDTO.class);
+            outerCommonDTO.getResults().remove(0);
+            List<SongDTO> songDTOs = new ArrayList<>();
+            for (InnerCommonDTO item : outerCommonDTO.getResults()) {
+                songDTOs.add(mapperFromInnerCommonDTO.toSongDTO(item));
+            }
+            songService.saveSongs(songDTOs);
         } catch (IOException e) {
             e.printStackTrace();
         }
