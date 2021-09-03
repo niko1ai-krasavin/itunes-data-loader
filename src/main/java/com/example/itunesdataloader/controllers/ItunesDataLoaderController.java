@@ -19,7 +19,7 @@ import okhttp3.ResponseBody;
 
 import com.example.itunesdataloader.configurations.OkHttpConfiguration;
 import com.example.itunesdataloader.dto.*;
-import com.example.itunesdataloader.mappers.MapperFromInnerCommonDTO;
+import com.example.itunesdataloader.mappers.InnerCommonDTOMapper;
 import com.example.itunesdataloader.services.AlbumService;
 import com.example.itunesdataloader.services.ArtistService;
 import com.example.itunesdataloader.services.SongService;
@@ -38,7 +38,7 @@ public class ItunesDataLoaderController {
     private final OkHttpConfiguration okHttpConfiguration;
 
     @Autowired
-    private final MapperFromInnerCommonDTO mapperFromInnerCommonDTO;
+    private final InnerCommonDTOMapper innerCommonDTOMapper;
 
     @Autowired
     private final ArtistService artistService;
@@ -60,7 +60,7 @@ public class ItunesDataLoaderController {
         try {
             ResponseBody responseBody = okHttpClient.newCall(request).execute().body();
             OuterCommonDTO outerCommonDTO = gson.fromJson(responseBody.string(), OuterCommonDTO.class);
-            ArtistDTO artistDTO = mapperFromInnerCommonDTO.toArtistDTO(outerCommonDTO.getResults().get(0));
+            ArtistDTO artistDTO = innerCommonDTOMapper.toArtistDTO(outerCommonDTO.getResults().get(0));
             artistService.saveArtist(artistDTO);
         } catch (IOException e) {
             e.printStackTrace();
@@ -79,10 +79,10 @@ public class ItunesDataLoaderController {
         try {
             ResponseBody responseBody = okHttpClient.newCall(request).execute().body();
             OuterCommonDTO outerCommonDTO = gson.fromJson(responseBody.string(), OuterCommonDTO.class);
-            ArtistDTO artistDTO = mapperFromInnerCommonDTO.toArtistDTO(outerCommonDTO.getResults().remove(0));
+            ArtistDTO artistDTO = innerCommonDTOMapper.toArtistDTO(outerCommonDTO.getResults().remove(0));
             List<AlbumDTO> albumDTOs = new ArrayList<>();
             for (InnerCommonDTO item : outerCommonDTO.getResults()) {
-                albumDTOs.add(mapperFromInnerCommonDTO.toAlbumDTO(item));
+                albumDTOs.add(innerCommonDTOMapper.toAlbumDTO(item));
             }
             artistService.saveArtist(artistDTO);
             albumService.saveAlbums(albumDTOs);
@@ -102,10 +102,10 @@ public class ItunesDataLoaderController {
         try {
             ResponseBody responseBody = okHttpClient.newCall(request).execute().body();
             OuterCommonDTO outerCommonDTO = gson.fromJson(responseBody.string(), OuterCommonDTO.class);
-            AlbumDTO albumDTO = mapperFromInnerCommonDTO.toAlbumDTO(outerCommonDTO.getResults().remove(0));
+            AlbumDTO albumDTO = innerCommonDTOMapper.toAlbumDTO(outerCommonDTO.getResults().remove(0));
             List<SongDTO> songDTOs = new ArrayList<>();
             for (InnerCommonDTO item : outerCommonDTO.getResults()) {
-                songDTOs.add(mapperFromInnerCommonDTO.toSongDTO(item));
+                songDTOs.add(innerCommonDTOMapper.toSongDTO(item));
             }
             albumService.saveAlbum(albumDTO);
             songService.saveSongs(songDTOs);
