@@ -7,7 +7,7 @@ import com.example.itunesdataloader.entities.Album;
 
 
 @Component
-public class MapperFromAlbumDTO {
+public class AlbumDTOMapper {
     public Album toAlbum(AlbumDTO albumDTO) {
         Album album = new Album();
         album.setCollectionId(albumDTO.getCollectionId());
@@ -20,5 +20,19 @@ public class MapperFromAlbumDTO {
         album.setCollectionType(albumDTO.getCollectionType());
         album.setReleaseDate(albumDTO.getReleaseDate());
         return album;
+    }
+
+    public AlbumDTO getAlbumDTO(Album album) {
+        AlbumDTO albumDTO = new AlbumDTO();
+        albumDTO.setCollectionId(album.getCollectionId());
+        albumDTO.setCollectionName(album.getCollectionName());
+        albumDTO.setCollectionPrice(album.getCollectionPrice());
+        albumDTO.setCopyright(album.getCopyright());
+        albumDTO.setCountry(album.getCountry());
+        albumDTO.setCurrency(album.getCurrency());
+        albumDTO.setTrackCount(album.getTrackCount());
+        albumDTO.setCollectionType(album.getCollectionType());
+        albumDTO.setReleaseDate(album.getReleaseDate());
+        return albumDTO;
     }
 }

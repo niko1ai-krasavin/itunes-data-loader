@@ -12,7 +12,7 @@ import com.example.itunesdataloader.dto.SongDTO;
 
 
 @Component
-public class MapperFromInnerCommonDTO {
+public class InnerCommonDTOMapper {
 
     public ArtistDTO toArtistDTO(InnerCommonDTO innerCommonDTO) {
         ArtistDTO artistDTO = new ArtistDTO();

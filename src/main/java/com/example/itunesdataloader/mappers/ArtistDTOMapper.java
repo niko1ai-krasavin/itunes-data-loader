@@ -7,7 +7,7 @@ import com.example.itunesdataloader.entities.Artist;
 
 
 @Component
-public class MapperFromArtistDTO {
+public class ArtistDTOMapper {
     public Artist toArtist(ArtistDTO artistDTO) {
         Artist artist = new Artist();
         artist.setArtistId(artistDTO.getArtistId());
@@ -18,5 +18,17 @@ public class MapperFromArtistDTO {
         artist.setPrimaryGenreName(artistDTO.getPrimaryGenreName());
         artist.setWrapperType(artistDTO.getWrapperType());
         return artist;
+    }
+
+    public ArtistDTO getArtistDTO(Artist artist) {
+        ArtistDTO artistDTO = new ArtistDTO();
+        artistDTO.setArtistId(artist.getArtistId());
+        artistDTO.setAmgArtistId(artist.getAmgArtistId());
+        artistDTO.setArtistName(artist.getArtistName());
+        artistDTO.setArtistType(artist.getArtistType());
+        artistDTO.setPrimaryGenreId(artist.getPrimaryGenreId());
+        artistDTO.setPrimaryGenreName(artist.getPrimaryGenreName());
+        artistDTO.setWrapperType(artist.getWrapperType());
+        return artistDTO;
     }
 }
