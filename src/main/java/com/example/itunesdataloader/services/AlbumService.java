@@ -1,6 +1,5 @@
 package com.example.itunesdataloader.services;
 
-import com.example.itunesdataloader.dto.AlbumDTO;
 import com.example.itunesdataloader.entities.Album;
 
 import java.util.List;
@@ -8,9 +7,9 @@ import java.util.List;
 
 public interface AlbumService {
 
-    void saveAlbum(AlbumDTO albumDTO);
+    void saveAlbum(Album album);
 
-    void saveAlbums(List<AlbumDTO> albumDTOs);
+    void saveAlbums(List<Album> albums);
 
     Album findAlbumById(Long id);
 

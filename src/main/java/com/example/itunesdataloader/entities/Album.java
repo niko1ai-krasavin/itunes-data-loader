@@ -2,9 +2,10 @@ package com.example.itunesdataloader.entities;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,5 +28,25 @@ public class Album implements Serializable {
     private String country;
     private String currency;
     private LocalDateTime releaseDate;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "artistId", nullable = false)
+    private Artist artist;
+    @Transient
+    @OneToMany(mappedBy = "trackId", fetch = FetchType.LAZY)
+    private Set<Song> songs = new HashSet<>();
 
+    public Album(Long collectionId, String collectionType, String collectionName, Double collectionPrice,
+                 Integer trackCount, String copyright, String country, String currency,
+                 LocalDateTime releaseDate, Artist artist) {
+        this.collectionId = collectionId;
+        this.collectionType = collectionType;
+        this.collectionName = collectionName;
+        this.collectionPrice = collectionPrice;
+        this.trackCount = trackCount;
+        this.copyright = copyright;
+        this.country = country;
+        this.currency = currency;
+        this.releaseDate = releaseDate;
+        this.artist = artist;
+    }
 }

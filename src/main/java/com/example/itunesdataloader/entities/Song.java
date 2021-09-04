@@ -3,8 +3,7 @@ package com.example.itunesdataloader.entities;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,5 +24,7 @@ public class Song implements Serializable {
     private LocalDateTime releaseDate;
     private Integer trackNumber;
     private Long trackTimeMillis;
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "collectionId", nullable = false)
+    private Album album;
 }

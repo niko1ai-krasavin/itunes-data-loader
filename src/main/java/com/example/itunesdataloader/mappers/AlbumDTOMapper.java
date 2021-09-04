@@ -33,6 +33,7 @@ public class AlbumDTOMapper {
         albumDTO.setTrackCount(album.getTrackCount());
         albumDTO.setCollectionType(album.getCollectionType());
         albumDTO.setReleaseDate(album.getReleaseDate());
+        albumDTO.setArtistId(album.getArtist().getArtistId());
         return albumDTO;
     }
 }

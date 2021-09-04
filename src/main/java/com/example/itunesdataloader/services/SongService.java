@@ -8,9 +8,9 @@ import com.example.itunesdataloader.entities.Song;
 
 public interface SongService {
 
-    void saveSong(SongDTO songDTO);
+    void saveSong(Song song);
 
-    void saveSongs(List<SongDTO> songDTOs);
+    void saveSongs(List<Song> songs);
 
     Song findSongById(Long id);
 

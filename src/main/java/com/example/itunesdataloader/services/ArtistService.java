@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ArtistService {
 
-    void saveArtist(ArtistDTO artistDTO);
+    void saveArtist(Artist artist);
 
     Artist findArtistById(Long id);
 

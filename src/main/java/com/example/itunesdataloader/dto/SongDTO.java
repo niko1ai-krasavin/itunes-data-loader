@@ -17,4 +17,5 @@ public class SongDTO implements Serializable {
     private LocalDateTime releaseDate;
     private Integer trackNumber;
     private Long trackTimeMillis;
+    private Long collectionId;
 }

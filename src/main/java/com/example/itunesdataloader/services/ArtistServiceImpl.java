@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import lombok.Data;
 
-import com.example.itunesdataloader.dto.ArtistDTO;
 import com.example.itunesdataloader.repositories.ArtistRepository;
 import com.example.itunesdataloader.mappers.ArtistDTOMapper;
 
@@ -20,12 +19,9 @@ public class ArtistServiceImpl implements ArtistService {
 
     private final ArtistRepository artistRepository;
 
-    @Autowired
-    private final ArtistDTOMapper artistDTOMapper;
-
     @Override
-    public void saveArtist(ArtistDTO artistDTO) {
-        artistRepository.save(artistDTOMapper.toArtist(artistDTO));
+    public void saveArtist(Artist artist) {
+        artistRepository.save(artist);
     }
 
     @Override

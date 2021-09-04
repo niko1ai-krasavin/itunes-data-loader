@@ -37,6 +37,7 @@ public class InnerCommonDTOMapper {
         albumDTO.setTrackCount(innerCommonDTO.getTrackCount());
         albumDTO.setCollectionType(innerCommonDTO.getCollectionType());
         albumDTO.setReleaseDate(LocalDateTime.parse(innerCommonDTO.getReleaseDate().strip(), DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+        albumDTO.setArtistId(innerCommonDTO.getArtistId());
         return albumDTO;
     }
 
@@ -49,6 +50,7 @@ public class InnerCommonDTOMapper {
         songDTO.setTrackNumber(innerCommonDTO.getTrackNumber());
         songDTO.setTrackPrice(innerCommonDTO.getTrackPrice());
         songDTO.setTrackTimeMillis(innerCommonDTO.getTrackTimeMillis());
+        songDTO.setCollectionId(innerCommonDTO.getCollectionId());
         return songDTO;
     }
 }

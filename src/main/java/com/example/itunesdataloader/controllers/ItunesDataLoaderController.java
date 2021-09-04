@@ -4,6 +4,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.itunesdataloader.entities.Album;
+import com.example.itunesdataloader.entities.Artist;
+import com.example.itunesdataloader.entities.Song;
+import com.example.itunesdataloader.mappers.AlbumDTOMapper;
+import com.example.itunesdataloader.mappers.ArtistDTOMapper;
+import com.example.itunesdataloader.mappers.SongDTOMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,6 +47,15 @@ public class ItunesDataLoaderController {
     private final InnerCommonDTOMapper innerCommonDTOMapper;
 
     @Autowired
+    private final ArtistDTOMapper artistDTOMapper;
+
+    @Autowired
+    private final AlbumDTOMapper albumDTOMapper;
+
+    @Autowired
+    private final SongDTOMapper songDTOMapper;
+
+    @Autowired
     private final ArtistService artistService;
 
     @Autowired
@@ -61,7 +76,7 @@ public class ItunesDataLoaderController {
             ResponseBody responseBody = okHttpClient.newCall(request).execute().body();
             OuterCommonDTO outerCommonDTO = gson.fromJson(responseBody.string(), OuterCommonDTO.class);
             ArtistDTO artistDTO = innerCommonDTOMapper.toArtistDTO(outerCommonDTO.getResults().get(0));
-            artistService.saveArtist(artistDTO);
+            artistService.saveArtist(artistDTOMapper.toArtist(artistDTO));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -84,8 +99,15 @@ public class ItunesDataLoaderController {
             for (InnerCommonDTO item : outerCommonDTO.getResults()) {
                 albumDTOs.add(innerCommonDTOMapper.toAlbumDTO(item));
             }
-            artistService.saveArtist(artistDTO);
-            albumService.saveAlbums(albumDTOs);
+            Artist artist = artistDTOMapper.toArtist(artistDTO);
+            artistService.saveArtist(artist);
+            List<Album> albums = new ArrayList<>();
+            for (AlbumDTO item : albumDTOs) {
+                Album album = albumDTOMapper.toAlbum(item);
+                album.setArtist(artist);
+                albums.add(album);
+            }
+            albumService.saveAlbums(albums);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -103,12 +125,18 @@ public class ItunesDataLoaderController {
             ResponseBody responseBody = okHttpClient.newCall(request).execute().body();
             OuterCommonDTO outerCommonDTO = gson.fromJson(responseBody.string(), OuterCommonDTO.class);
             AlbumDTO albumDTO = innerCommonDTOMapper.toAlbumDTO(outerCommonDTO.getResults().remove(0));
-            List<SongDTO> songDTOs = new ArrayList<>();
+            Album album = albumDTOMapper.toAlbum(albumDTO);
+            Artist artist = artistService.findArtistById(albumDTO.getArtistId());
+            album.setArtist(artist);
+            List<Song> songs = new ArrayList<>();
             for (InnerCommonDTO item : outerCommonDTO.getResults()) {
-                songDTOs.add(innerCommonDTOMapper.toSongDTO(item));
+                SongDTO songDTO = innerCommonDTOMapper.toSongDTO(item);
+                Song song = songDTOMapper.toSong(songDTO);
+                song.setAlbum(album);
+                songs.add(song);
             }
-            albumService.saveAlbum(albumDTO);
-            songService.saveSongs(songDTOs);
+            albumService.saveAlbum(album);
+            songService.saveSongs(songs);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -19,4 +19,5 @@ public class AlbumDTO implements Serializable {
     private String country;
     private String currency;
     private LocalDateTime releaseDate;
+    private Long artistId;
 }

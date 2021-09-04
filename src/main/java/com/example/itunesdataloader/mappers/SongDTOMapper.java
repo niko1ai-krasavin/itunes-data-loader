@@ -29,6 +29,7 @@ public class SongDTOMapper {
         songDTO.setTrackNumber(song.getTrackNumber());
         songDTO.setTrackPrice(song.getTrackPrice());
         songDTO.setTrackTimeMillis(song.getTrackTimeMillis());
+        songDTO.setCollectionId(song.getAlbum().getCollectionId());
         return songDTO;
     }
 }

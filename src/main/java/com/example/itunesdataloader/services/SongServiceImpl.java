@@ -21,20 +21,13 @@ public class SongServiceImpl implements SongService {
 
     private final SongRepository songRepository;
 
-    @Autowired
-    private final SongDTOMapper mapperFromSongDTO;
-
     @Override
-    public void saveSong(SongDTO songDTO) {
-        songRepository.save(mapperFromSongDTO.toSong(songDTO));
+    public void saveSong(Song song) {
+        songRepository.save(song);
     }
 
     @Override
-    public void saveSongs(List<SongDTO> songDTOs) {
-        List<Song> songs = new ArrayList<>();
-        for (SongDTO item : songDTOs) {
-            songs.add(mapperFromSongDTO.toSong(item));
-        }
+    public void saveSongs(List<Song> songs) {
         songRepository.saveAll(songs);
     }
 
