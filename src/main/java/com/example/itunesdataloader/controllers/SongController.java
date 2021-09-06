@@ -1,13 +1,12 @@
 package com.example.itunesdataloader.controllers;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import lombok.AllArgsConstructor;
 
@@ -42,4 +41,19 @@ public class SongController {
         return songDTOMapper.getSongDTO(songService.findSongById(id));
     }
 
+    @GetMapping("/lookup")
+    public List<SongDTO> getAllSongsByYearAndSortedByTrackPriceInAscOrDescOrder(
+            @RequestParam String year,
+            @RequestParam String order
+    ) {
+        String strStartDate = year + "-01-01T00:00:00Z";
+        String strEndDate = year + "-12-31T23:59:59Z";
+        LocalDateTime startDate = LocalDateTime.parse(strStartDate, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+        LocalDateTime endDate = LocalDateTime.parse(strEndDate, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+        List<SongDTO> songDTOList = new ArrayList<>();
+        for (Song item : songService.findAllSongsByYearAndSortedByTrackPriceInAscOrDescOrder(startDate, endDate, order)) {
+            songDTOList.add(songDTOMapper.getSongDTO(item));
+        }
+        return songDTOList;
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.itunesdataloader.services;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.example.itunesdataloader.dto.SongDTO;
@@ -16,4 +17,7 @@ public interface SongService {
 
     List<Song> findAllSongs();
 
+    List<Song> findAllSongsByYearAndSortedByTrackPriceInAscOrDescOrder(LocalDateTime startDate,
+                                                                       LocalDateTime endDate,
+                                                                       String order);
 }
