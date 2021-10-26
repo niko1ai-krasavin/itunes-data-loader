@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import lombok.AllArgsConstructor;
@@ -17,7 +19,7 @@ import com.example.itunesdataloader.services.SongService;
 
 
 @AllArgsConstructor
-@RestController
+@Controller
 @RequestMapping("/app/songs")
 public class SongController {
 
@@ -28,23 +30,36 @@ public class SongController {
     private final SongDTOMapper songDTOMapper;
 
     @GetMapping()
-    public List<SongDTO> getAllSongs() {
+    public String getAllSongs(Model model) {
         List<SongDTO> songDTOList = new ArrayList<>();
         for (Song item : songService.findAllSongs()) {
             songDTOList.add(songDTOMapper.getSongDTO(item));
         }
-        return songDTOList;
+        model.addAttribute("songResponse",  songDTOList);
+        return "songs";
     }
 
     @GetMapping("/{id}")
-    public SongDTO getSongById(@PathVariable Long id) {
-        return songDTOMapper.getSongDTO(songService.findSongById(id));
+    public String getSongById(@PathVariable Long id, Model model) {
+        model.addAttribute("songResponse",  songDTOMapper.getSongDTO(songService.findSongById(id)));
+        return "songs";
+    }
+
+    @GetMapping("/find/{collectionId}")
+    public String getAllSongsByCollectionId(@PathVariable Long collectionId, Model model) {
+        List<SongDTO> songDTOList = new ArrayList<>();
+        for (Song item : songService.findAllByCollectionId(collectionId)) {
+            songDTOList.add(songDTOMapper.getSongDTO(item));
+        }
+        model.addAttribute("songResponse", songDTOList);
+        return "songs";
     }
 
     @GetMapping("/lookup")
-    public List<SongDTO> getAllSongsByYearAndSortedByTrackPriceInAscOrDescOrder(
-            @RequestParam String year,
-            @RequestParam String order
+    public String getAllSongsByYearAndSortedByTrackPriceInAscOrDescOrder(
+            @RequestParam(value = "year", required = true) String year,
+            @RequestParam(value = "order", required = true) String order,
+            Model model
     ) {
         String strStartDate = year + "-01-01T00:00:00Z";
         String strEndDate = year + "-12-31T23:59:59Z";
@@ -54,6 +69,7 @@ public class SongController {
         for (Song item : songService.findAllSongsByYearAndSortedByTrackPriceInAscOrDescOrder(startDate, endDate, order)) {
             songDTOList.add(songDTOMapper.getSongDTO(item));
         }
-        return songDTOList;
+        model.addAttribute("songResponse",  songDTOList);
+        return "songs";
     }
 }

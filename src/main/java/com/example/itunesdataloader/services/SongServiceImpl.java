@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import com.example.itunesdataloader.entities.Album;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import lombok.Data;
@@ -17,6 +19,9 @@ import com.example.itunesdataloader.repositories.SongRepository;
 public class SongServiceImpl implements SongService {
 
     private final SongRepository songRepository;
+
+    @Autowired
+    private final AlbumService albumService;
 
     @Override
     public void saveSong(Song song) {
@@ -34,9 +39,17 @@ public class SongServiceImpl implements SongService {
         return optionalSong.get();
     }
 
+
+
     @Override
     public List<Song> findAllSongs() {
         return songRepository.findAll();
+    }
+
+    @Override
+    public List<Song> findAllByCollectionId(Long collectionId) {
+        Album album = albumService.findAlbumById(collectionId);
+        return songRepository.findByAlbum(album);
     }
 
     @Override

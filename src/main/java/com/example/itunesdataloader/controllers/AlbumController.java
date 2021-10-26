@@ -1,13 +1,14 @@
 package com.example.itunesdataloader.controllers;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import lombok.AllArgsConstructor;
 
@@ -18,7 +19,7 @@ import com.example.itunesdataloader.services.AlbumService;
 
 
 @AllArgsConstructor
-@RestController
+@Controller
 @RequestMapping("/app/albums")
 public class AlbumController {
 
@@ -30,16 +31,46 @@ public class AlbumController {
 
 
     @GetMapping()
-    public List<AlbumDTO> getAllAlbums() {
+    public String getAllAlbums(Model model) {
         List<AlbumDTO> albumDTOList = new ArrayList<>();
         for (Album item : albumService.findAllAlbums()) {
             albumDTOList.add(albumDTOMapper.getAlbumDTO(item));
         }
-        return albumDTOList;
+        model.addAttribute("albumResponse", albumDTOList);
+        return "albums";
     }
 
     @GetMapping("/{id}")
-    public AlbumDTO getAlbumById(@PathVariable Long id) {
-        return albumDTOMapper.getAlbumDTO(albumService.findAlbumById(id));
+    public String getAlbumById(@PathVariable Long id, Model model) {
+        model.addAttribute("albumResponse", albumDTOMapper.getAlbumDTO(albumService.findAlbumById(id)));
+        return "albums";
+    }
+
+    @GetMapping("/find/{artistId}")
+    public String getAllAlbumsByArtistId(@PathVariable Long artistId, Model model) {
+        List<AlbumDTO> albumDTOList = new ArrayList<>();
+        for (Album item : albumService.findAllByArtistId(artistId)) {
+            albumDTOList.add(albumDTOMapper.getAlbumDTO(item));
+        }
+        model.addAttribute("albumResponse", albumDTOList);
+        return "albums";
+    }
+
+    @GetMapping("/lookup")
+    public String getAllAlbumsByYearAndSortedByCollectionPriceInAscOrDescOrder(
+            @RequestParam(value = "year", required = true) String year,
+            @RequestParam(value = "order", required = true) String order,
+            Model model
+    ) {
+        String strStartDate = year + "-01-01T00:00:00Z";
+        String strEndDate = year + "-12-31T23:59:59Z";
+        LocalDateTime startDate = LocalDateTime.parse(strStartDate, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+        LocalDateTime endDate = LocalDateTime.parse(strEndDate, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+        List<AlbumDTO> albumDTOList = new ArrayList<>();
+        for (Album item : albumService.findAllAlbumsByYearAndSortedByCollectionPriceInAscOrDescOrder(startDate, endDate, order)) {
+            albumDTOList.add(albumDTOMapper.getAlbumDTO(item));
+        }
+        model.addAttribute("albumResponse",  albumDTOList);
+        return "albums";
     }
 }

@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import lombok.AllArgsConstructor;
 
@@ -18,7 +19,7 @@ import com.example.itunesdataloader.services.ArtistService;
 
 
 @AllArgsConstructor
-@RestController
+@Controller
 @RequestMapping("/app/artists")
 public class ArtistController {
 
@@ -30,17 +31,20 @@ public class ArtistController {
 
 
     @GetMapping()
-    public List<ArtistDTO> getAllArtists() {
+    public String getAllArtists(Model model) {
         List<ArtistDTO> artistDTOList = new ArrayList<>();
         for (Artist item : artistService.findAllArtists()) {
             artistDTOList.add(artistDTOMapper.getArtistDTO(item));
         }
-        return artistDTOList;
+        model.addAttribute("artistResponse", artistDTOList);
+        return "artists";
     }
 
     @GetMapping("/{id}")
-    public ArtistDTO getArtistById(@PathVariable Long id) {
-        return artistDTOMapper.getArtistDTO(artistService.findArtistById(id));
+    public String getArtistById(@PathVariable Long id, Model model) {
+        ArtistDTO artistDTO = artistDTOMapper.getArtistDTO(artistService.findArtistById(id));
+        model.addAttribute("artistResponse", artistDTO);
+        return "artists";
     }
 
 }

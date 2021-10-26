@@ -4,25 +4,27 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.ResponseBody;
+
+import com.google.gson.Gson;
+
+import lombok.AllArgsConstructor;
+
 import com.example.itunesdataloader.entities.Album;
 import com.example.itunesdataloader.entities.Artist;
 import com.example.itunesdataloader.entities.Song;
 import com.example.itunesdataloader.mappers.AlbumDTOMapper;
 import com.example.itunesdataloader.mappers.ArtistDTOMapper;
 import com.example.itunesdataloader.mappers.SongDTOMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import lombok.AllArgsConstructor;
-
-import com.google.gson.Gson;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.ResponseBody;
-
 import com.example.itunesdataloader.configurations.OkHttpConfiguration;
 import com.example.itunesdataloader.dto.*;
 import com.example.itunesdataloader.mappers.InnerCommonDTOMapper;
@@ -32,8 +34,8 @@ import com.example.itunesdataloader.services.SongService;
 
 
 @AllArgsConstructor
-@RestController
-@RequestMapping("/itunes")
+@Controller
+@RequestMapping("/dataloader")
 public class ItunesDataLoaderController {
 
     // private static String ARTIST_ID = "487143";  Artist => Pink Floyd
@@ -65,8 +67,13 @@ public class ItunesDataLoaderController {
     private final SongService songService;
 
 
+    @GetMapping()
+    String viewDataloaderTemplate() {
+        return "dataloader";
+    }
+
     @GetMapping("/artist/{artistId}")
-    public void getArtistFromITunes(@PathVariable Long artistId) {
+    public String getArtistFromITunes(@PathVariable Long artistId, Model model) {
 
         OkHttpClient okHttpClient = okHttpConfiguration.okHttpClient();
         Request request = new Request.Builder().url(BASE_URL_ITUNES + "id=" + artistId).build();
@@ -80,11 +87,12 @@ public class ItunesDataLoaderController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        model.addAttribute("dataLoaderResponse", "Data received successfully");
+        return "dataloader";
     }
 
-
     @GetMapping("/artist/{artistId}/albums")
-    public void getAlbumsFromITunes(@PathVariable Long artistId) {
+    public String getAlbumsFromITunes(@PathVariable Long artistId, Model model) {
 
         OkHttpClient okHttpClient = okHttpConfiguration.okHttpClient();
         Request request = new Request.Builder().url(BASE_URL_ITUNES + "id=" +
@@ -111,10 +119,12 @@ public class ItunesDataLoaderController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        model.addAttribute("dataLoaderResponse", "Data received successfully");
+        return "dataloader";
     }
 
     @GetMapping("/albums/{collectionId}/songs")
-    public void getSongsFromITunes(@PathVariable Long collectionId) {
+    public String getSongsFromITunes(@PathVariable Long collectionId, Model model) {
 
         OkHttpClient okHttpClient = okHttpConfiguration.okHttpClient();
         Request request = new Request.Builder().url(BASE_URL_ITUNES + "id=" +
@@ -140,5 +150,7 @@ public class ItunesDataLoaderController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        model.addAttribute("dataLoaderResponse", "Data received successfully");
+        return "dataloader";
     }
 }

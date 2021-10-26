@@ -1,8 +1,9 @@
 package com.example.itunesdataloader.services;
 
-import com.example.itunesdataloader.entities.Album;
-
+import java.time.LocalDateTime;
 import java.util.List;
+
+import com.example.itunesdataloader.entities.Album;
 
 
 public interface AlbumService {
@@ -14,5 +15,11 @@ public interface AlbumService {
     Album findAlbumById(Long id);
 
     List<Album> findAllAlbums();
+
+    List<Album> findAllByArtistId(Long artistId);
+
+    List<Album> findAllAlbumsByYearAndSortedByCollectionPriceInAscOrDescOrder(LocalDateTime startDate,
+                                                                        LocalDateTime endDate,
+                                                                        String order);
 
 }
