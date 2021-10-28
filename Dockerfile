@@ -7,9 +7,9 @@ COPY src /app/src
 RUN mvn -f /app/pom.xml clean package -Dmaven.test.skip=true
 
 #
-# It starts the simple-wallet.jar file
+# It starts the jar file
 #
-FROM adoptopenjdk/openjdk11
+FROM azul/zulu-openjdk-alpine:11-jre-headless
 WORKDIR /opt
 COPY --from=building /app/target/*.jar ./itunes-data-loader.jar
 EXPOSE 8080
