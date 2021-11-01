@@ -1,0 +1,13 @@
+image: "change_me_i_am_image"
+
+env:
+  - name: MYSQL_DB_HOST
+    value: "change_me_i_am_db_host"
+  - name: MYSQL_DATABASE_NAME
+    value: "change_me_i_am_db_name"
+  - name: MYSQL_USERNAME
+    value: "change_me_i_am_username"
+  - name: MYSQL_PASSWORD
+    value: "change_me_i_am_password"
+
+countOfReplicas: 3

@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: itunes-data-loader-deployment
+spec:
+  replicas: {{ .Values.countOfReplicas }}
+  selector:
+    matchLabels:
+      app: itunes-data-loader
+  template:
+    metadata:
+      labels:
+        app: itunes-data-loader
+    spec:
+      containers:
+        - name: itunes-data-loader
+          image: {{ .Values.image }}
+          ports:
+            - containerPort: 8080
+          env:
+            {{- range .Values.env }}
+            - name: {{ .name }}
+              value: {{ .value }}
+            {{- end }}
