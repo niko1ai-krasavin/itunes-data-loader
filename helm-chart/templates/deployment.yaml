@@ -18,8 +18,11 @@ spec:
           ports:
             - containerPort: 8080
           env:
-          range $key, $val := $secretValue.data
-          {{- range $key, $val := .Values.env }}
-            - name: {{ $key }}
-              value: {{ $val }}
-          {{- end }}
+            - name: MYSQL_DB_HOST
+              value: {{ .Values.env.MYSQL_DB_HOST }}
+            - name: MYSQL_DATABASE_NAME
+              value: {{ .Values.env.MYSQL_DATABASE_NAME }}
+            - name: MYSQL_USERNAME
+              value: {{ .Values.env.MYSQL_USERNAME }}
+            - name: MYSQL_PASSWORD
+              value: {{ .Values.env.MYSQL_PASSWORD }}
