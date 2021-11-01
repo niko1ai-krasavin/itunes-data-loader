@@ -6,4 +6,4 @@ env:
   MYSQL_USERNAME: "change_me_i_am_username"
   MYSQL_PASSWORD: "change_me_i_am_password"
 
-countOfReplicas: 3
+countOfReplicas: 2
