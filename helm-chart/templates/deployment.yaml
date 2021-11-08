@@ -17,6 +17,7 @@ spec:
           image: {{ .Values.image }}
           ports:
             - containerPort: 8080
+            - containerPort: 3306
           env:
             - name: MYSQL_DB_HOST
               value: {{ .Values.env.MYSQL_DB_HOST }}
