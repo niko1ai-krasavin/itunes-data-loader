@@ -29,6 +29,9 @@ public class SongController {
     @Autowired
     private final SongDTOMapper songDTOMapper;
 
+    @Autowired
+    private final ItunesDataLoaderController itunesDataLoaderController;
+
     @GetMapping()
     public String getAllSongs(Model model) {
         List<SongDTO> songDTOList = new ArrayList<>();
@@ -50,6 +53,11 @@ public class SongController {
         List<SongDTO> songDTOList = new ArrayList<>();
         for (Song item : songService.findAllByCollectionId(collectionId)) {
             songDTOList.add(songDTOMapper.getSongDTO(item));
+        }
+        if (songDTOList.size() == 0) {
+            itunesDataLoaderController.getSongsFromITunes(collectionId.toString(), model);
+            for (Song item : songService.findAllByCollectionId(collectionId))
+                songDTOList.add(songDTOMapper.getSongDTO(item));
         }
         model.addAttribute("songResponse", songDTOList);
         return "songs";

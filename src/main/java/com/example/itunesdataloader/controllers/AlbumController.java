@@ -29,6 +29,8 @@ public class AlbumController {
     @Autowired
     private final AlbumDTOMapper albumDTOMapper;
 
+    @Autowired
+    private final ItunesDataLoaderController itunesDataLoaderController;
 
     @GetMapping()
     public String getAllAlbums(Model model) {
@@ -51,6 +53,11 @@ public class AlbumController {
         List<AlbumDTO> albumDTOList = new ArrayList<>();
         for (Album item : albumService.findAllByArtistId(artistId)) {
             albumDTOList.add(albumDTOMapper.getAlbumDTO(item));
+        }
+        if (albumDTOList.size() == 0) {
+            itunesDataLoaderController.getSongsFromITunes(artistId.toString(), model);
+            for (Album item : albumService.findAllByArtistId(artistId))
+                albumDTOList.add(albumDTOMapper.getAlbumDTO(item));
         }
         model.addAttribute("albumResponse", albumDTOList);
         return "albums";

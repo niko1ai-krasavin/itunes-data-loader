@@ -49,11 +49,11 @@
                 </div>
                 <hr>
                 <div class="container p-4">
-                    <form method="get" th:action="@{'/dataloader/artist/' + ${artistId} + '/albums'}">
+                    <form method="get" th:action="@{/dataloader/artist_and_albums}">
                         <legend>Download information about the author and his albums</legend>
                         <div class="mb-3">
                             <label for="artistId" class="form-label">Artist's ID</label>
-                            <input type="text" class="form-control" id="artistId">
+                            <input id="artistId" type="text" name="artistId" th:value="${artistId}" class="form-control">
                         </div>
                         <div class="row">
                             <div class="col-2">
@@ -64,15 +64,15 @@
                             </div>
                         </div>
                     </form>
-                    <form class="mt-5">
+                    <form class="mt-5" method="get" th:action="@{/dataloader/album_and_songs}">
                         <legend>Download information about albums and songs of this album</legend>
                         <div class="mb-3">
                             <label for="collectionId" class="form-label">Album's ID</label>
-                            <input th:value="${id}" type="text" class="form-control" id="collectionId">
+                            <input id="collectionId" type="text" name="collectionId" th:value="${collectionId}" class="form-control" >
                         </div>
                         <div class="row">
                             <div class="col-2">
-                                <a th:href="@{'/album/{collectionId}/songs'(collectionId=${id})}" class="btn btn-primary">Submit</a>
+                                <button type="submit" class="btn btn-primary">Submit</button>
                             </div>
                             <div class="col-4">
                                 <p th:text="${dataLoaderResponse}"></p>

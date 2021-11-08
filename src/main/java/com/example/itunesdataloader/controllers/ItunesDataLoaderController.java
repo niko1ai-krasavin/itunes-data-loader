@@ -31,6 +31,7 @@ import com.example.itunesdataloader.mappers.InnerCommonDTOMapper;
 import com.example.itunesdataloader.services.AlbumService;
 import com.example.itunesdataloader.services.ArtistService;
 import com.example.itunesdataloader.services.SongService;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 @AllArgsConstructor
@@ -91,8 +92,13 @@ public class ItunesDataLoaderController {
         return "dataloader";
     }
 
-    @GetMapping("/artist/{artistId}/albums")
-    public String getAlbumsFromITunes(@PathVariable Long artistId, Model model) {
+    // @GetMapping("/artist/{artistId}/albums")
+    @GetMapping("/artist_and_albums")
+    public String getAlbumsFromITunes(
+            // @PathVariable Long artistId, Model model
+            @RequestParam(value = "artistId", required = true) String artistId,
+            Model model
+    ) {
 
         OkHttpClient okHttpClient = okHttpConfiguration.okHttpClient();
         Request request = new Request.Builder().url(BASE_URL_ITUNES + "id=" +
@@ -123,8 +129,13 @@ public class ItunesDataLoaderController {
         return "dataloader";
     }
 
-    @GetMapping("/albums/{collectionId}/songs")
-    public String getSongsFromITunes(@PathVariable Long collectionId, Model model) {
+    // @GetMapping("/albums/{collectionId}/songs")
+    @GetMapping("/album_and_songs")
+    public String getSongsFromITunes(
+            // @PathVariable Long collectionId, Model model
+            @RequestParam(value = "collectionId", required = true) String collectionId,
+            Model model
+    ) {
 
         OkHttpClient okHttpClient = okHttpConfiguration.okHttpClient();
         Request request = new Request.Builder().url(BASE_URL_ITUNES + "id=" +
