@@ -34,7 +34,7 @@ pipeline {
             }
             steps {
                 sh 'aws eks --region eu-central-1 update-kubeconfig --name ${EKS_CLUSTER_NAME}'
-                sh 'helm install itunes-data-loader helm-chart/ \
+                sh 'helm install itunes-data-loader-$(git describe --tags) helm-chart/ \
                 --set env.MYSQL_DB_HOST=${PROD_RDS_ENDPOINT} \
                 --set env.MYSQL_DATABASE_NAME=${RDS_DB_NAME} \
                 --set env.MYSQL_USERNAME=${RDS_CREDENTIALS_USR} \
